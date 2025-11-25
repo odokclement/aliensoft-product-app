@@ -5,7 +5,23 @@ import axios from "axios";
 
 export const useAuthStore = defineStore("auth", () => {
   const token = ref(localStorage.getItem("authToken") || "");
-  const user = ref(JSON.parse(localStorage.getItem("user") || "null"));
+  const user = ref(null);
+
+  // Initialize user from localStorage
+  const initUser = () => {
+    try {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        user.value = JSON.parse(savedUser);
+      }
+    } catch (error) {
+      console.error("Error parsing user from localStorage:", error);
+      user.value = null;
+    }
+  };
+
+  // Initialize on store creation
+  initUser();
 
   const isAuthenticated = computed(() => !!token.value);
 
@@ -24,9 +40,10 @@ export const useAuthStore = defineStore("auth", () => {
 
       return { success: true, data: response.data };
     } catch (error) {
+      console.error("Login error:", error);
       return {
         success: false,
-        error: error.response?.data?.message || "Login failed",
+        error: error.response?.data?.message || "Invalid credentials. Please try again.",
       };
     }
   };
@@ -42,9 +59,14 @@ export const useAuthStore = defineStore("auth", () => {
     const savedToken = localStorage.getItem("authToken");
     const savedUser = localStorage.getItem("user");
 
-    if (savedToken) {
-      token.value = savedToken;
-      user.value = JSON.parse(savedUser);
+    if (savedToken && savedUser) {
+      try {
+        token.value = savedToken;
+        user.value = JSON.parse(savedUser);
+      } catch (error) {
+        console.error("Error restoring session:", error);
+        logout();
+      }
     }
   };
 

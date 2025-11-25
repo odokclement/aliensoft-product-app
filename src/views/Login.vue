@@ -136,7 +136,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
@@ -152,6 +152,13 @@ const loading = ref(false);
 const error = ref("");
 const showPassword = ref(false);
 const passwordTimeout = ref(null);
+
+// Check if already logged in
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    router.push("/products");
+  }
+});
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
@@ -173,19 +180,24 @@ const handleLogin = async () => {
   loading.value = true;
   error.value = "";
 
-  const result = await authStore.login(credentials.value);
+  try {
+    const result = await authStore.login(credentials.value);
 
-  if (result.success) {
-    router.push("/products");
-  } else {
-    error.value = result.error;
+    if (result.success) {
+      // Force a full page reload to ensure proper state initialization
+      window.location.href = "/products";
+    } else {
+      error.value = result.error || "Login failed. Please try again.";
+    }
+  } catch (err) {
+    error.value = "An unexpected error occurred. Please try again.";
+    console.error("Login error:", err);
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
 };
 
 // Clean up timeout when component unmounts
-import { onUnmounted } from "vue";
 onUnmounted(() => {
   if (passwordTimeout.value) {
     clearTimeout(passwordTimeout.value);
