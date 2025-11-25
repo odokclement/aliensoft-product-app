@@ -184,6 +184,7 @@ const handleLogin = async () => {
     const result = await authStore.login(credentials.value);
 
     if (result.success) {
+        //router.push("/products");
       // Force a full page reload to ensure proper state initialization
       window.location.href = "/products";
     } else {
