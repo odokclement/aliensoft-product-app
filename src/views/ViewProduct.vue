@@ -110,40 +110,38 @@
             v-else-if="product"
             class="bg-white rounded-lg border border-gray-200 p-8"
           >
-            <!-- Header -->
-            <div class="flex justify-between items-start mb-6">
-              <div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                  {{ product.title }}
-                </h1>
-                <p class="text-gray-600 text-lg">
-                  {{ product.description }}
-                </p>
-              </div>
-
-              <button
-                @click="handleEdit"
-                class="flex items-center gap-2 px-4 py-2 text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors"
-              >
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                Edit Product
-              </button>
-            </div>
-
-            <!-- Product Layout -->
+            <!-- Product Layout - Image on left, title/description on right -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-              <!-- IMAGE -->
+              <!-- LEFT COLUMN - Product Image -->
               <div class="flex justify-center">
                 <img
                   :src="product.thumbnail"
-                  class="rounded-lg w-full max-w-md object-cover h-[420px]"
-                />
+                  :alt="product.title"
+                  class="w-full max-w-md h-96 object-cover rounded-lg"
+                >
               </div>
 
-              <!-- RIGHT INFO -->
+              <!-- RIGHT COLUMN - Product Title, Description and Details -->
               <div class="space-y-6">
+                <!-- Title and Description -->
+                <div>
+                  <h1 class="text-3xl font-bold text-gray-900 mb-3">
+                    {{ product.title }}
+                  </h1>
+                  <p class="text-gray-600 text-lg mb-6">
+                    {{ product.description }}
+                  </p>
+                  <button
+                    @click="handleEdit"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors"
+                  >
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Edit Product
+                  </button>
+                </div>
+
                 <!-- Price and Category Table -->
                 <div>
                   <table class="w-full border-collapse">

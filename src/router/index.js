@@ -31,6 +31,13 @@ const routes = [
     component: () => import("../views/ViewProduct.vue"),
     meta: { requiresAuth: true },
   },
+    {
+    path: '/products/:id/edit', 
+    name: 'EditProduct',
+    component: () => import('../views/EditProduct.vue'),
+    meta: { requiresAuth: true},
+    },
+  
 ];
 
 const router = createRouter({

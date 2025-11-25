@@ -1,167 +1,131 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Add New Product</h1>
-      <p class="text-gray-600">Create a new product in your inventory.</p>
+  <div class="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-8">
+
+    <!-- COMPACT HEADER WITH BACK BUTTON -->
+    <div class="mb-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Back Button -->
+        <button
+          @click="$router.push('/products')"
+          class=" flex px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition "
+        >
+          <ArrowLeftIcon class="w-5 h-5" />
+          <span class="hidden sm:inline">Back to Products</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Product Form -->
-    <div class="max-w-2xl">
-      <form
-        @submit.prevent="handleSubmit"
-        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+    <!-- MAIN FORM CARD -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8 max-w-4xl mx-auto">
+
+      <!-- PAGE HEADER INSIDE CARD -->
+      <div class="mb-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Add New Product</h1>
+        <p class="text-sm sm:text-base text-gray-600">Enter the details below to add a new item to your inventory.</p>
+      </div>
+
+      <!-- PRODUCT INFORMATION -->
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Product Information</h2>
+
+      <!-- Product Title -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Product Title</label>
+        <input
+          v-model="form.title"
+          type="text"
+          placeholder="Enter product title"
+          class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Product Description -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Product Description</label>
+        <textarea
+          v-model="form.description"
+          rows="3"
+          placeholder="Provide a detailed description of the product"
+          class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+        ></textarea>
+      </div>
+
+      <!-- PRICING & INVENTORY -->
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Pricing & Inventory</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Price -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+          <input
+            type="number"
+            v-model.number="form.price"
+            placeholder="$ 0.00"
+            class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+          />
+        </div>
+
+        <!-- Stock Quantity -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+          <input
+            type="number"
+            v-model.number="form.stock"
+            placeholder="Enter stock quantity"
+            class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+        <select
+          v-model="form.category"
+          class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+        >
+          <option value="">Select a category</option>
+          <option value="apparel">Apparel</option>
+          <option value="electronics">Electronics</option>
+          <option value="accessories">Accessories</option>
+        </select>
+      </div>
+
+      <!-- MEDIA -->
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Media</h2>
+
+      <!-- Upload area -->
+      <div
+        class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
       >
-        <!-- Form Fields -->
-        <div class="space-y-6">
-          <!-- Title -->
-          <div>
-            <label
-              for="title"
-              class="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Title *
-            </label>
-            <input
-              id="title"
-              v-model="form.title"
-              type="text"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-              placeholder="Enter product title"
-            />
-          </div>
-
-          <!-- Description -->
-          <div>
-            <label
-              for="description"
-              class="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Description
-            </label>
-            <textarea
-              id="description"
-              v-model="form.description"
-              rows="4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-              placeholder="Enter product description"
-            />
-          </div>
-
-          <!-- Category -->
-          <div>
-            <label
-              for="category"
-              class="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Category *
-            </label>
-            <input
-              id="category"
-              v-model="form.category"
-              type="text"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-              placeholder="Enter product category"
-            />
-          </div>
-
-          <!-- Price and Stock -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label
-                for="price"
-                class="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Price *
-              </label>
-              <input
-                id="price"
-                v-model.number="form.price"
-                type="number"
-                step="0.01"
-                min="0"
-                required
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-                placeholder="0.00"
-              />
-            </div>
-
-            <div>
-              <label
-                for="stock"
-                class="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Stock *
-              </label>
-              <input
-                id="stock"
-                v-model.number="form.stock"
-                type="number"
-                min="0"
-                required
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-                placeholder="0"
-              />
-            </div>
-          </div>
-
-          <!-- Thumbnail URL -->
-          <div>
-            <label
-              for="thumbnail"
-              class="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Thumbnail URL
-            </label>
-            <input
-              id="thumbnail"
-              v-model="form.thumbnail"
-              type="url"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-
-          <!-- Preview -->
-          <div v-if="form.thumbnail" class="border rounded-lg p-4">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">
-              Thumbnail Preview
-            </h3>
-            <img
-              :src="form.thumbnail"
-              alt="Thumbnail preview"
-              class="h-32 w-32 object-cover rounded"
-              @error="handleImageError"
-            />
-          </div>
+        <!-- Solid background upload icon with primary color -->
+        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-3">
+          <ArrowUpTrayIcon class="w-6 h-6 text-white" />
         </div>
 
-        <!-- Form Actions -->
-        <div class="flex gap-4 pt-6 mt-6 border-t border-gray-200">
-          <button
-            type="button"
-            @click="$router.back()"
-            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            :disabled="loading"
-            class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span v-if="loading">Adding Product...</span>
-            <span v-else>Add Product</span>
-          </button>
-        </div>
+        <p class="text-blue-700 font-medium text-sm">Click to upload</p>
+        <p class="text-gray-500 text-xs mt-1">or drag and drop</p>
+        <p class="text-gray-400 text-xs mt-1">SVG, PNG, JPG or GIF (MAX. 800×400px)</p>
+      </div>
 
-        <!-- Error Message -->
-        <div v-if="error" class="mt-4 text-red-600 text-sm">
-          {{ error }}
-        </div>
-      </form>
+      <!-- ACTION BUTTONS -->
+      <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200">
+        <button
+          @click="$router.push('/products')"
+          class="px-5 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+        >
+          Cancel
+        </button>
+
+        <button
+          @click="handleSubmit"
+          :disabled="loading"
+          class="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+        >
+          <span v-if="loading">Saving...</span>
+          <span v-else>Save Product</span>
+        </button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -170,6 +134,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useProductsStore } from "../stores/products";
+import { ArrowLeftIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
 
 const router = useRouter();
 const productStore = useProductsStore();
